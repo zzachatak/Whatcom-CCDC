@@ -1,0 +1,54 @@
+1. Checking the vuln service is running
+- systemctl list-units --type=service | grep -i ftp
+Or listen to the port:
+- ss -tulpn | grep :21
+
+If found, stop and disable it:
+sudo systemctl stop vsftpd
+sudo systemctl disable vsftpd
+
+
+How to harden FTP (if required)
+vsftpd hardening (/etc/vsftpd.conf)
+anonymous_enable=NO
+local_enable=YES
+write_enable=NO
+chroot_local_user=YES
+allow_writeable_chroot=NO
+ssl_enable=YES
+
+Then Restart the service:
+sudo systemctl restart vsftpd
+
+What this does:
+Security controls
+Disable anonymous login
+Use FTPS (TLS encryption)
+Chroot users
+Restrict write access
+Firewall restrict port 21
+
+For TELNET
+systemctl status telnet.socket
+ss -tulpn | grep :23
+
+Disable it with 
+sudo systemctl stop telnet.socket
+sudo systemctl disable telnet.socket
+
+rlogin / rsh (VERY dangerous)
+systemctl list-units --type=service | grep -E 'rlogin|rsh|rexec'
+ss -tulpn | grep -E ':512|:513|:514'
+
+How to disable it
+sudo systemctl stop rsh.socket rlogin.socket rexec.socket
+sudo systemctl disable rsh.socket rlogin.socket rexec.socket
+
+SSH Hardening (Replacement Best Practice)
+/etc/ssh/sshd_config
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+MaxAuthTries 3
+AllowUsers youruser
+
