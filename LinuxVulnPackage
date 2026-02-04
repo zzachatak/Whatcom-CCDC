@@ -1,0 +1,36 @@
+Minimize Software to Minimize Vulnerability in Linux
+# yum list installed
+# yum list packageName
+# yum remove packageName
+
+OR
+# dpkg --list
+# dpkg --info packageName
+# apt-get remove packageName
+
+Category 1: Legacy / Insecure Network Services (HIGH RISK)
+
+These are immediate red flags during audits and pentests.
+
+Package	Why It’s Dangerous	Replace With
+telnet, telnet-server	Plaintext credentials	openssh-server
+ftp, vsftpd, proftpd	Plaintext auth / file access	SFTP
+rsh, rlogin, rexec	Trust-based auth (no passwords)	SSH
+tftp	No auth, trivial abuse	SCP / SFTP
+xinetd	Exposes legacy services	systemd-native services
+
+Web Services You Don’t Explicitly Need
+
+Category 2: If the system is not a web server, these are major red flags.
+
+Package	Risk
+apache2, httpd	Exposed HTTP attack surface
+nginx	Same as above
+php, php-fpm	RCE, file upload abuse
+tomcat, jetty	Java RCE history
+nodejs, npm	Supply-chain risk
+lighttpd	Often forgotten
+
+
+
+
